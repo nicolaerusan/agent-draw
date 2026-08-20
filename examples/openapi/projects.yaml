@@ -1,0 +1,39 @@
+openapi: 3.1.0
+info:
+  title: Project Service
+  version: 1.4.0
+servers:
+  - url: https://{host}/anything
+    variables:
+      host:
+        default: httpbin.org
+paths:
+  /projects:
+    get:
+      operationId: listProjects
+      summary: List projects
+      description: Returns projects visible to the current agent.
+      tags: [Projects]
+      responses:
+        "200":
+          description: Project list
+    post:
+      operationId: createProject
+      summary: Create project
+      tags: [Projects]
+      requestBody:
+        content:
+          application/json:
+            example:
+              name: agent-draw
+      responses:
+        "201":
+          description: Created
+  /health:
+    get:
+      operationId: getHealth
+      summary: Runtime health
+      tags: [Operations]
+      responses:
+        "200":
+          description: Healthy

@@ -1,0 +1,146 @@
+{
+  "format": "agent-draw",
+  "version": "0.1",
+  "id": "agent-canvas-loop",
+  "title": "Human + agent canvas loop",
+  "revision": 0,
+  "plugins": {
+    "agent-draw.core": "^0.1.0"
+  },
+  "nodes": [
+    {
+      "id": "file-project-context",
+      "type": "agent-draw.core/file",
+      "label": "Repository context",
+      "position": { "x": 70, "y": 100 },
+      "size": { "w": 265, "h": 112 },
+      "ports": [{ "id": "exports", "direction": "output", "label": "facts" }],
+      "data": {
+        "sources": ["source files", "OpenAPI", "database schema"]
+      },
+      "capabilityRefs": [],
+      "extensions": {}
+    },
+    {
+      "id": "service-agent",
+      "type": "agent-draw.core/service",
+      "label": "Drawing agent",
+      "position": { "x": 450, "y": 100 },
+      "size": { "w": 255, "h": 112 },
+      "ports": [
+        { "id": "request", "direction": "input", "label": "context" },
+        { "id": "calls", "direction": "output", "label": "patch" }
+      ],
+      "data": {
+        "behavior": "Reads the graph and proposes small semantic changes"
+      },
+      "capabilityRefs": [],
+      "extensions": {}
+    },
+    {
+      "id": "service-canonical-document",
+      "type": "agent-draw.core/service",
+      "label": "Canonical graph document",
+      "position": { "x": 830, "y": 100 },
+      "size": { "w": 290, "h": 112 },
+      "ports": [
+        { "id": "request", "direction": "input", "label": "apply patch" },
+        { "id": "calls", "direction": "output", "label": "render" }
+      ],
+      "data": {
+        "format": "agent-draw/0.1",
+        "invariants": ["stable IDs", "optimistic revisions", "extensions"]
+      },
+      "capabilityRefs": [],
+      "extensions": {}
+    },
+    {
+      "id": "service-tldraw-adapter",
+      "type": "agent-draw.core/service",
+      "label": "tldraw adapter",
+      "position": { "x": 1245, "y": 100 },
+      "size": { "w": 255, "h": 112 },
+      "ports": [
+        { "id": "request", "direction": "input", "label": "document" },
+        { "id": "calls", "direction": "output", "label": "canvas" }
+      ],
+      "data": {
+        "owns": ["shapes", "bindings", "selection", "camera"]
+      },
+      "capabilityRefs": [],
+      "extensions": {}
+    },
+    {
+      "id": "external-human",
+      "type": "agent-draw.core/external",
+      "label": "Human collaborator",
+      "position": { "x": 1635, "y": 100 },
+      "size": { "w": 265, "h": 112 },
+      "ports": [
+        { "id": "request", "direction": "input", "label": "inspect + arrange" }
+      ],
+      "data": {
+        "actions": ["draw", "inspect", "connect", "review"]
+      },
+      "capabilityRefs": [],
+      "extensions": {}
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-context-agent",
+      "type": "agent-draw.core/depends-on",
+      "label": "grounds",
+      "source": { "nodeId": "file-project-context", "portId": "exports" },
+      "target": { "nodeId": "service-agent", "portId": "request" },
+      "data": {},
+      "extensions": {}
+    },
+    {
+      "id": "edge-agent-document",
+      "type": "agent-draw.core/calls",
+      "label": "proposes patch",
+      "source": { "nodeId": "service-agent", "portId": "calls" },
+      "target": {
+        "nodeId": "service-canonical-document",
+        "portId": "request"
+      },
+      "data": {},
+      "extensions": {}
+    },
+    {
+      "id": "edge-document-adapter",
+      "type": "agent-draw.core/calls",
+      "label": "renders",
+      "source": {
+        "nodeId": "service-canonical-document",
+        "portId": "calls"
+      },
+      "target": { "nodeId": "service-tldraw-adapter", "portId": "request" },
+      "data": {},
+      "extensions": {}
+    },
+    {
+      "id": "edge-adapter-human",
+      "type": "agent-draw.core/calls",
+      "label": "interactive canvas",
+      "source": { "nodeId": "service-tldraw-adapter", "portId": "calls" },
+      "target": { "nodeId": "external-human", "portId": "request" },
+      "data": {},
+      "extensions": {}
+    }
+  ],
+  "views": [
+    {
+      "id": "collaboration-loop",
+      "name": "Collaboration loop",
+      "extensions": {}
+    }
+  ],
+  "capabilities": [],
+  "metadata": {
+    "createdBy": "agent-draw",
+    "purpose": "Show the renderer-independent human and agent loop"
+  },
+  "extensions": {}
+}

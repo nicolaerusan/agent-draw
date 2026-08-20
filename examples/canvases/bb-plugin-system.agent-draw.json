@@ -1,0 +1,167 @@
+{
+  "format": "agent-draw",
+  "version": "0.1",
+  "id": "bb-plugin-system",
+  "title": "BB-style plugin system",
+  "revision": 0,
+  "plugins": {
+    "agent-draw.core": "^0.1.0"
+  },
+  "nodes": [
+    {
+      "id": "file-plugin-manifest",
+      "type": "agent-draw.core/file",
+      "label": "plugin.json",
+      "position": { "x": 70, "y": 100 },
+      "size": { "w": 245, "h": 112 },
+      "ports": [
+        { "id": "exports", "direction": "output", "label": "declares" }
+      ],
+      "data": {
+        "path": ".codex-plugin/plugin.json",
+        "description": "Identity, compatibility, contributions, and permissions"
+      },
+      "capabilityRefs": [],
+      "extensions": {}
+    },
+    {
+      "id": "service-plugin-host",
+      "type": "agent-draw.core/service",
+      "label": "Plugin host",
+      "position": { "x": 430, "y": 100 },
+      "size": { "w": 255, "h": 112 },
+      "ports": [
+        { "id": "request", "direction": "input", "label": "register" },
+        { "id": "calls", "direction": "output", "label": "contributes" }
+      ],
+      "data": {
+        "responsibility": "Validates manifests and owns plugin lifecycle"
+      },
+      "capabilityRefs": [],
+      "extensions": {}
+    },
+    {
+      "id": "service-frontend-surfaces",
+      "type": "agent-draw.core/service",
+      "label": "Frontend surfaces",
+      "position": { "x": 810, "y": 30 },
+      "size": { "w": 255, "h": 112 },
+      "ports": [
+        { "id": "request", "direction": "input", "label": "panels + commands" },
+        { "id": "calls", "direction": "output", "label": "events" }
+      ],
+      "data": {
+        "examples": ["panels", "menus", "mentions", "settings"]
+      },
+      "capabilityRefs": [],
+      "extensions": {}
+    },
+    {
+      "id": "service-agent-tools",
+      "type": "agent-draw.core/service",
+      "label": "Agent tools / MCP",
+      "position": { "x": 810, "y": 205 },
+      "size": { "w": 255, "h": 112 },
+      "ports": [
+        { "id": "request", "direction": "input", "label": "tool registration" },
+        { "id": "calls", "direction": "output", "label": "requests" }
+      ],
+      "data": {
+        "responsibility": "Structured agent-facing operations"
+      },
+      "capabilityRefs": [],
+      "extensions": {}
+    },
+    {
+      "id": "service-capability-broker",
+      "type": "agent-draw.core/service",
+      "label": "Capability broker",
+      "position": { "x": 1190, "y": 205 },
+      "size": { "w": 265, "h": 112 },
+      "ports": [
+        { "id": "request", "direction": "input", "label": "authorize" },
+        { "id": "calls", "direction": "output", "label": "invoke" }
+      ],
+      "data": {
+        "policy": "Explicit grants, secret references, and audit records"
+      },
+      "capabilityRefs": [],
+      "extensions": {}
+    },
+    {
+      "id": "external-apps",
+      "type": "agent-draw.core/external",
+      "label": "Apps and connectors",
+      "position": { "x": 1580, "y": 205 },
+      "size": { "w": 250, "h": 112 },
+      "ports": [
+        { "id": "request", "direction": "input", "label": "bounded call" }
+      ],
+      "data": {
+        "examples": ["GitHub", "Notion", "Slack", "filesystem"]
+      },
+      "capabilityRefs": [],
+      "extensions": {}
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-manifest-host",
+      "type": "agent-draw.core/depends-on",
+      "label": "declares",
+      "source": { "nodeId": "file-plugin-manifest", "portId": "exports" },
+      "target": { "nodeId": "service-plugin-host", "portId": "request" },
+      "data": {},
+      "extensions": {}
+    },
+    {
+      "id": "edge-host-frontend",
+      "type": "agent-draw.core/calls",
+      "label": "mounts",
+      "source": { "nodeId": "service-plugin-host", "portId": "calls" },
+      "target": { "nodeId": "service-frontend-surfaces", "portId": "request" },
+      "data": {},
+      "extensions": {}
+    },
+    {
+      "id": "edge-host-tools",
+      "type": "agent-draw.core/calls",
+      "label": "registers",
+      "source": { "nodeId": "service-plugin-host", "portId": "calls" },
+      "target": { "nodeId": "service-agent-tools", "portId": "request" },
+      "data": {},
+      "extensions": {}
+    },
+    {
+      "id": "edge-tools-broker",
+      "type": "agent-draw.core/calls",
+      "label": "requests grant",
+      "source": { "nodeId": "service-agent-tools", "portId": "calls" },
+      "target": { "nodeId": "service-capability-broker", "portId": "request" },
+      "data": {},
+      "extensions": {}
+    },
+    {
+      "id": "edge-broker-apps",
+      "type": "agent-draw.core/calls",
+      "label": "invokes",
+      "source": { "nodeId": "service-capability-broker", "portId": "calls" },
+      "target": { "nodeId": "external-apps", "portId": "request" },
+      "data": {},
+      "extensions": {}
+    }
+  ],
+  "views": [
+    {
+      "id": "plugin-architecture",
+      "name": "Plugin architecture",
+      "extensions": {}
+    }
+  ],
+  "capabilities": [],
+  "metadata": {
+    "createdBy": "agent-draw",
+    "purpose": "Example of a BB-inspired plugin boundary"
+  },
+  "extensions": {}
+}

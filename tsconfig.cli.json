@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "types": ["node"]
+  },
+  "include": [
+    "bin",
+    "server/mcp.ts",
+    "src/agent",
+    "src/importers",
+    "src/model",
+    "src/plugins"
+  ],
+  "exclude": ["src/**/*.test.ts"]
+}

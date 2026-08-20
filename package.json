@@ -1,0 +1,50 @@
+{
+  "name": "agent-draw",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Agent-first executable technical diagram canvas",
+  "bin": {
+    "agent-draw": "./bin/agent-draw.ts",
+    "agent-draw-mcp": "./server/mcp.ts"
+  },
+  "packageManager": "pnpm@10.15.1",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "concurrently -n canvas,runtime -c cyan,magenta \"vite\" \"tsx watch server/index.ts\"",
+    "dev:web": "vite",
+    "dev:server": "tsx watch server/index.ts",
+    "agent-draw": "tsx bin/agent-draw.ts",
+    "mcp": "tsx server/mcp.ts",
+    "build": "tsc -b && vite build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -b --pretty false",
+    "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "@floating-ui/dom": "^1.7.4",
+    "@modelcontextprotocol/server": "^2.0.0",
+    "express": "^5.2.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tldraw": "^5.3.2",
+    "yaml": "^2.9.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.5",
+    "@types/node": "^24.10.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "concurrently": "^9.2.1",
+    "prettier": "^3.6.2",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vite": "^6.4.1",
+    "vitest": "^3.2.4"
+  }
+}

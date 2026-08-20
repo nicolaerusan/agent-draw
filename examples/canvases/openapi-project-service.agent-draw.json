@@ -1,0 +1,291 @@
+{
+  "format": "agent-draw",
+  "version": "0.1",
+  "id": "openapi-project-service",
+  "title": "Project Service · API map",
+  "revision": 0,
+  "plugins": {
+    "agent-draw.core": "^0.1.0",
+    "agent-draw.api": "^0.1.0"
+  },
+  "nodes": [
+    {
+      "id": "service-projects",
+      "type": "agent-draw.core/service",
+      "label": "Projects",
+      "position": {
+        "x": 480,
+        "y": 154
+      },
+      "size": {
+        "w": 250,
+        "h": 116
+      },
+      "ports": [
+        {
+          "id": "request",
+          "direction": "input",
+          "label": "request"
+        },
+        {
+          "id": "calls",
+          "direction": "output",
+          "label": "calls"
+        }
+      ],
+      "data": {
+        "openapiTitle": "Project Service",
+        "openapiVersion": "1.4.0",
+        "operationCount": 2
+      },
+      "capabilityRefs": [],
+      "extensions": {
+        "agent-draw.provenance": {
+          "source": "examples/openapi/projects.yaml",
+          "tag": "Projects"
+        }
+      }
+    },
+    {
+      "id": "endpoint-listprojects",
+      "type": "agent-draw.api/endpoint",
+      "label": "List projects",
+      "position": {
+        "x": 80,
+        "y": 50
+      },
+      "size": {
+        "w": 300,
+        "h": 116
+      },
+      "ports": [
+        {
+          "id": "request",
+          "direction": "input",
+          "label": "request"
+        },
+        {
+          "id": "invokes",
+          "direction": "output",
+          "label": "invokes"
+        }
+      ],
+      "data": {
+        "method": "GET",
+        "url": "https://httpbin.org/anything/projects",
+        "headers": {
+          "accept": "application/json"
+        },
+        "description": "Returns projects visible to the current agent.",
+        "path": "/projects",
+        "operationId": "listProjects",
+        "tag": "Projects"
+      },
+      "capabilityRefs": ["http-runtime"],
+      "extensions": {
+        "agent-draw.provenance": {
+          "source": "examples/openapi/projects.yaml",
+          "openapiVersion": "3.1.0",
+          "method": "GET",
+          "path": "/projects"
+        }
+      }
+    },
+    {
+      "id": "endpoint-createproject",
+      "type": "agent-draw.api/endpoint",
+      "label": "Create project",
+      "position": {
+        "x": 80,
+        "y": 200
+      },
+      "size": {
+        "w": 300,
+        "h": 116
+      },
+      "ports": [
+        {
+          "id": "request",
+          "direction": "input",
+          "label": "request"
+        },
+        {
+          "id": "invokes",
+          "direction": "output",
+          "label": "invokes"
+        }
+      ],
+      "data": {
+        "method": "POST",
+        "url": "https://httpbin.org/anything/projects",
+        "headers": {
+          "accept": "application/json"
+        },
+        "body": "{\n  \"name\": \"agent-draw\"\n}",
+        "path": "/projects",
+        "operationId": "createProject",
+        "tag": "Projects"
+      },
+      "capabilityRefs": ["http-runtime"],
+      "extensions": {
+        "agent-draw.provenance": {
+          "source": "examples/openapi/projects.yaml",
+          "openapiVersion": "3.1.0",
+          "method": "POST",
+          "path": "/projects"
+        }
+      }
+    },
+    {
+      "id": "service-operations",
+      "type": "agent-draw.core/service",
+      "label": "Operations",
+      "position": {
+        "x": 1200,
+        "y": 90
+      },
+      "size": {
+        "w": 250,
+        "h": 116
+      },
+      "ports": [
+        {
+          "id": "request",
+          "direction": "input",
+          "label": "request"
+        },
+        {
+          "id": "calls",
+          "direction": "output",
+          "label": "calls"
+        }
+      ],
+      "data": {
+        "openapiTitle": "Project Service",
+        "openapiVersion": "1.4.0",
+        "operationCount": 1
+      },
+      "capabilityRefs": [],
+      "extensions": {
+        "agent-draw.provenance": {
+          "source": "examples/openapi/projects.yaml",
+          "tag": "Operations"
+        }
+      }
+    },
+    {
+      "id": "endpoint-gethealth",
+      "type": "agent-draw.api/endpoint",
+      "label": "Runtime health",
+      "position": {
+        "x": 800,
+        "y": 50
+      },
+      "size": {
+        "w": 300,
+        "h": 116
+      },
+      "ports": [
+        {
+          "id": "request",
+          "direction": "input",
+          "label": "request"
+        },
+        {
+          "id": "invokes",
+          "direction": "output",
+          "label": "invokes"
+        }
+      ],
+      "data": {
+        "method": "GET",
+        "url": "https://httpbin.org/anything/health",
+        "headers": {
+          "accept": "application/json"
+        },
+        "path": "/health",
+        "operationId": "getHealth",
+        "tag": "Operations"
+      },
+      "capabilityRefs": ["http-runtime"],
+      "extensions": {
+        "agent-draw.provenance": {
+          "source": "examples/openapi/projects.yaml",
+          "openapiVersion": "3.1.0",
+          "method": "GET",
+          "path": "/health"
+        }
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-endpoint-listprojects-service-projects",
+      "type": "agent-draw.api/invokes",
+      "label": "invokes",
+      "source": {
+        "nodeId": "endpoint-listprojects",
+        "portId": "invokes"
+      },
+      "target": {
+        "nodeId": "service-projects",
+        "portId": "request"
+      },
+      "data": {},
+      "extensions": {}
+    },
+    {
+      "id": "edge-endpoint-createproject-service-projects",
+      "type": "agent-draw.api/invokes",
+      "label": "invokes",
+      "source": {
+        "nodeId": "endpoint-createproject",
+        "portId": "invokes"
+      },
+      "target": {
+        "nodeId": "service-projects",
+        "portId": "request"
+      },
+      "data": {},
+      "extensions": {}
+    },
+    {
+      "id": "edge-endpoint-gethealth-service-operations",
+      "type": "agent-draw.api/invokes",
+      "label": "invokes",
+      "source": {
+        "nodeId": "endpoint-gethealth",
+        "portId": "invokes"
+      },
+      "target": {
+        "nodeId": "service-operations",
+        "portId": "request"
+      },
+      "data": {},
+      "extensions": {}
+    }
+  ],
+  "views": [
+    {
+      "id": "api-map",
+      "name": "API map",
+      "extensions": {}
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "http-runtime",
+      "kind": "network.http",
+      "config": {
+        "policy": "public-network-only"
+      }
+    }
+  ],
+  "metadata": {
+    "importedFrom": "openapi",
+    "source": "examples/openapi/projects.yaml",
+    "openapiVersion": "3.1.0",
+    "apiVersion": "1.4.0"
+  },
+  "extensions": {}
+}
